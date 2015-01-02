@@ -25,6 +25,14 @@ colors = {"red": (255, 0, 0), "green": (0, 255, 0), "blue": (0, 0, 255), "white"
 
 running = True
 
+# Fonts
+
+defaultFont = pygame.font.SysFont(None, 48)
+
+# BG
+
+bg = pygame.image.load("res/img/background-image.png")
+
 # Input
 
 moveUp = False
@@ -35,13 +43,14 @@ moveRight = False
 # Player Variables
 
 playerPosition = [400, 300]
+PLAYER_IMG_PATH = "res/img/player.png"
+playerImage = pygame.image.load(PLAYER_IMG_PATH)
+playerSpeed = 5
+playerScore = 0
 
 # Projectile Class
 
 projectiles = []
-PLAYER_IMG_PATH = "res/img/player.png"
-playerImage = pygame.image.load(PLAYER_IMG_PATH)
-playerSpeed = 5
 
 
 class Projectile:
@@ -57,13 +66,13 @@ class Projectile:
 
     def update_pos(self):
         if self.direction is "up":
-            self.pos[1] -= 5
+            self.pos[1] -= 10
         elif self.direction is "down":
-            self.pos[1] += 5
+            self.pos[1] += 10
         elif self.direction is "left":
-            self.pos[0] -= 5
+            self.pos[0] -= 10
         elif self.direction is "right":
-            self.pos[0] += 5
+            self.pos[0] += 10
 
 # Enemy class
 
@@ -114,6 +123,7 @@ def check_projectile_collision():
             if enemy.pos[0] < proj.pos[0] + 28 and enemy.pos[0] + 28 > proj.pos[0] and enemy.pos[1] < proj.pos[1] + 14 and enemy.pos[1] + 14 > proj.pos[1]:
                 print("shot")
                 try:
+                    #playerScore += 1
                     enemies.remove(enemy)
                     projectiles.remove(proj)
                 except ValueError:
@@ -200,15 +210,19 @@ while running:
     for enemy in enemies:
         enemy.match_position(playerPosition)
 
-    window.fill(colors["yellow"])
     check_projectile_collision()
     check_player_collision()
+    scoreText = defaultFont.render(str(playerScore), 1, (255, 0, 0))
+
+    window.fill(colors["yellow"])
 
     # drawing code goes here
 
+    window.blit(bg, (0, 0))
     draw_projectiles()
     draw_enemies()
     window.blit(playerImage, (playerPosition[0] - 14, playerPosition[1] - 14))
+    window.blit(scoreText, (380, 20))
     pygame.display.flip()
     clean_memory()
 
