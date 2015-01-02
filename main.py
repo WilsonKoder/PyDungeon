@@ -123,11 +123,11 @@ def check_projectile_collision():
             if enemy.pos[0] < proj.pos[0] + 28 and enemy.pos[0] + 28 > proj.pos[0] and enemy.pos[1] < proj.pos[1] + 14 and enemy.pos[1] + 14 > proj.pos[1]:
                 print("shot")
                 try:
-                    #playerScore += 1
                     enemies.remove(enemy)
                     projectiles.remove(proj)
                 except ValueError:
                     print("oops!")
+                return True
 
 
 def check_player_collision():
@@ -210,7 +210,9 @@ while running:
     for enemy in enemies:
         enemy.match_position(playerPosition)
 
-    check_projectile_collision()
+    shot = check_projectile_collision()
+    if shot:
+        playerScore += 1
     check_player_collision()
     scoreText = defaultFont.render(str(playerScore), 1, (255, 0, 0))
 
