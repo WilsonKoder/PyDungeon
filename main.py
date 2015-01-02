@@ -88,14 +88,14 @@ class Enemy:
 
     def match_position(self, player_pos):
         if self.pos[0] < player_pos[0]:
-            self.pos[0] += 1
+            self.pos[0] += 3
         else:
-            self.pos[0] -= 1
+            self.pos[0] -= 3
 
         if self.pos[1] < player_pos[1]:
-            self.pos[1] += 1
+            self.pos[1] += 3
         else:
-            self.pos[1] -= 1
+            self.pos[1] -= 3
 
 
 def draw_enemies():
