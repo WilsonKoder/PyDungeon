@@ -98,6 +98,13 @@ class Enemy:
     def __init__(self):
         self.pos = [random.randint(0, 799), random.randint(0, 599)]
 
+        while self.pos[0] < playerPosition[0] + 100 and self.pos[0] > playerPosition[0] - 100:
+            self.pos[0] = random.randint(0, 799)
+
+        while self.pos[1] < playerPosition[1] + 100 and self.pos[1] > playerPosition[1] - 100:
+            self.pos[1] = random.randint(0, 599)
+
+
     def match_position(self, player_pos):
         if self.pos[0] < player_pos[0]:
             self.pos[0] += enemySpeed
@@ -228,10 +235,14 @@ while running:
     elif playerPosition[0] < -15:
         playerPosition[0] = 815
 
+    # ~~~~~~~~~~~~~~~ wrapping
+
     if playerPosition[1] > 615:
         playerPosition[1] = -15
     elif playerPosition[1] < -15:
         playerPosition[1] = 615
+
+    # ~~~~~~~~~~~~~~~
 
     count += 1
 
@@ -313,4 +324,4 @@ while running:
 pygame.quit()
 sys.exit()
 
-# ~~~~~~~~~~~ 312 Lines ~~~~~~~~~~~~
+# ~~~~~~~~~~~ 312 Lines ~~~~~~~~~~~~ Will be recreated using SDL2 and C++! ~~~~~~~~~~~~
