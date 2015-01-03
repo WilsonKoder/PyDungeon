@@ -7,7 +7,6 @@ __author__ = 'WilsonKoder'
 import pygame  # used for graphics
 import random  # used for enemy spawning
 import sys  # used to close the application
-import platform
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
