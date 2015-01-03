@@ -47,6 +47,10 @@ PLAYER_IMG_PATH = "res/img/player.png"
 playerImage = pygame.image.load(PLAYER_IMG_PATH)
 playerSpeed = 5
 playerScore = 0
+dead = False
+scores = ""
+loadScores = False
+showText = False
 
 # Projectile Class
 
@@ -78,7 +82,7 @@ class Projectile:
 
 enemies = []
 count = 0
-
+enemySpeed = 3
 
 class Enemy:
     pos = [1, 1]
@@ -88,14 +92,14 @@ class Enemy:
 
     def match_position(self, player_pos):
         if self.pos[0] < player_pos[0]:
-            self.pos[0] += 3
+            self.pos[0] += enemySpeed
         else:
-            self.pos[0] -= 3
+            self.pos[0] -= enemySpeed
 
         if self.pos[1] < player_pos[1]:
-            self.pos[1] += 3
+            self.pos[1] += enemySpeed
         else:
-            self.pos[1] -= 3
+            self.pos[1] -= enemySpeed
 
 
 def draw_enemies():
@@ -133,9 +137,7 @@ def check_projectile_collision():
 def check_player_collision():
     for enemy in enemies:
         if enemy.pos[0] < playerPosition[0] + 28 and enemy.pos[0] + 28 > playerPosition[0] and enemy.pos[1] < playerPosition[1] + 14 and enemy.pos[1] + 14 > playerPosition[1]:
-            print("dead")
-            pygame.quit()
-            sys.exit()
+            return True
 
 # Main loop
 
@@ -213,20 +215,54 @@ while running:
     shot = check_projectile_collision()
     if shot:
         playerScore += 1
-    check_player_collision()
+
+    playerStatus = check_player_collision()
+
+    if playerStatus:
+        dead = True
+        loadScores = True
+
     scoreText = defaultFont.render(str(playerScore), 1, (255, 0, 0))
 
     window.fill(colors["yellow"])
 
-    # drawing code goes here
-
     window.blit(bg, (0, 0))
-    draw_projectiles()
-    draw_enemies()
-    window.blit(playerImage, (playerPosition[0] - 14, playerPosition[1] - 14))
-    window.blit(scoreText, (380, 20))
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ drawing code under here
+
+    if not dead:
+        draw_projectiles()
+        draw_enemies()
+        window.blit(playerImage, (playerPosition[0] - 14, playerPosition[1] - 14))
+        window.blit(scoreText, (380, 20))
+        clean_memory()
+    else:
+        if showText:
+            scoreList = scores.split("|")
+            scoreList.remove('')
+            for score in scoreList:
+                score = int(score)
+            scoreList.sort()
+            scoreList.reverse()  # sort() gives us a reversed one, so reverse it again.
+            ypos = 20
+
+            for score in scoreList:
+                ypos += 30
+                scoresText = defaultFont.render(str(score), 1, (255, 0, 0))
+                window.blit(scoresText, (380, ypos))
+
+        elif loadScores:
+            scoreFile = open("data/pScores.su", "a")
+            scoreFile.write(str(playerScore) + "|")
+            scoreFile.close()
+            scoreFile = open("data/pScores.su", "r")
+            scores = scoreFile.readline()
+            showText = True
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     pygame.display.flip()
-    clean_memory()
+
 
 pygame.quit()
 sys.exit()
