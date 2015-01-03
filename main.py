@@ -285,7 +285,6 @@ while running:
 
         elif loadScores:
             try:
-
                 scoreFile = open("pScores.su", "a")
                 if playerScore is not 0:
                     scoreFile.write(str(playerScore) + "|")
@@ -308,3 +307,5 @@ while running:
 
 pygame.quit()
 sys.exit()
+
+# ~~~~~~~~~~~ 312 Lines ~~~~~~~~~~~~
