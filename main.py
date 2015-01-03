@@ -2,9 +2,9 @@ __author__ = 'WilsonKoder'
 
 # Dungeon Game by Wilson
 
-import pygame
-import random
-import sys
+import pygame  # used for graphics
+import random  # used for enemy spawning
+import sys  # used to close the application
 
 pygame.init()
 
@@ -55,7 +55,7 @@ showText = False
 # Projectile Class
 
 projectiles = []
-
+projectileImage = pygame.image.load("res/img/projectile.png")
 
 class Projectile:
 
@@ -65,8 +65,7 @@ class Projectile:
     def __init__(self, dir, playerPos):
         if dir is "up" or "down" or "left" or "right":
             self.direction = dir
-            print("shoot " + dir)
-            self.pos = playerPos[:]
+            self.pos = [playerPos[0] - 14, playerPos[1] - 14]  # add an offset to makesure that the bullets line up with the player
 
     def update_pos(self):
         if self.direction is "up":
@@ -83,6 +82,7 @@ class Projectile:
 enemies = []
 count = 0
 enemySpeed = 3
+
 
 class Enemy:
     pos = [1, 1]
@@ -110,7 +110,7 @@ def draw_enemies():
 def draw_projectiles():
     for projectile in projectiles:
         position = projectile.pos
-        pygame.draw.circle(window, colors["black"], position, 14, 0)
+        window.blit(projectileImage, position)
 
 
 def clean_memory():
@@ -202,6 +202,16 @@ while running:
     elif moveRight:
         playerPosition[0] += int(playerSpeed)
 
+    if playerPosition[0] > 815:
+        playerPosition[0] = -15
+    elif playerPosition[0] < -15:
+        playerPosition[0] = 815
+
+    if playerPosition[1] > 615:
+        playerPosition[1] = -15
+    elif playerPosition[1] < -15:
+        playerPosition[1] = 615
+
     count += 1
 
     if count > 50:
@@ -239,30 +249,43 @@ while running:
     else:
         if showText:
             scoreList = scores.split("|")
-            scoreList.remove('')
+            scoreList.remove('')  # this will throw an error when we try to convert the list to an integer list if we don't do it
             for score in scoreList:
                 score = int(score)
             scoreList.sort()
             scoreList.reverse()  # sort() gives us a reversed one, so reverse it again.
             ypos = 20
 
+            title = defaultFont.render("High Scores: ", 1, colors["red"])
+            window.blit(title, (300, 0))
+
             for score in scoreList:
                 ypos += 30
-                scoresText = defaultFont.render(str(score), 1, (255, 0, 0))
+                scoresText = defaultFont.render(str(score), 1, colors["red"])
                 window.blit(scoresText, (380, ypos))
 
         elif loadScores:
-            scoreFile = open("data/pScores.su", "a")
-            scoreFile.write(str(playerScore) + "|")
-            scoreFile.close()
-            scoreFile = open("data/pScores.su", "r")
-            scores = scoreFile.readline()
-            showText = True
+            try:
+
+                scoreFile = open("pScores.su", "a")
+                if playerScore is not 0:
+                    scoreFile.write(str(playerScore) + "|")
+                scoreFile.close()
+                scoreFile = open("pScores.su", "r")
+                scores = scoreFile.readline()
+                showText = True
+            except FileNotFoundError:
+                scoreFile = open("pScores.su", "x")
+                if playerScore is not 0:
+                    scoreFile.write(str(playerScore) + "|")
+                scoreFile.close()
+                scoreFile = open("pScores.su", "r")
+                scores = scoreFile.readline()
+                showText = True
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     pygame.display.flip()
-
 
 pygame.quit()
 sys.exit()
