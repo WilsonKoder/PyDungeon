@@ -7,9 +7,11 @@ __author__ = 'WilsonKoder'
 import pygame  # used for graphics
 import random  # used for enemy spawning
 import sys  # used to close the application
+import platform
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+print("Python ", sys.version)
 pygame.init()
 
 # Window Setup
@@ -109,6 +111,8 @@ class Enemy:
             self.pos[1] -= enemySpeed
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ functions
+
 def draw_enemies():
     for enemy in enemies:
         pygame.draw.circle(window, colors["green"], enemy.pos, 14, 0)
@@ -145,6 +149,8 @@ def check_player_collision():
     for enemy in enemies:
         if enemy.pos[0] < playerPosition[0] + 28 and enemy.pos[0] + 28 > playerPosition[0] and enemy.pos[1] < playerPosition[1] + 14 and enemy.pos[1] + 14 > playerPosition[1]:
             return True
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Main loop
 
@@ -209,14 +215,14 @@ while running:
         projectile.update_pos()
 
     if moveUp:
-        playerPosition[1] -= int(playerSpeed)
+        playerPosition[1] -= playerSpeed
     elif moveDown:
-        playerPosition[1] += int(playerSpeed)
+        playerPosition[1] += playerSpeed
 
     if moveLeft:
-        playerPosition[0] -= int(playerSpeed)
+        playerPosition[0] -= playerSpeed
     elif moveRight:
-        playerPosition[0] += int(playerSpeed)
+        playerPosition[0] += playerSpeed
 
     if playerPosition[0] > 815:
         playerPosition[0] = -15
