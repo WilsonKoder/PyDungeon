@@ -47,6 +47,7 @@ PLAYER_IMG_PATH = "res/img/player.png"
 playerImage = pygame.image.load(PLAYER_IMG_PATH)
 playerSpeed = 5
 playerScore = 0
+playerAmmo = 100
 dead = False
 scores = ""
 loadScores = False
@@ -64,6 +65,7 @@ class Projectile:
 
     def __init__(self, dir, playerPos):
         if dir is "up" or "down" or "left" or "right":
+
             self.direction = dir
             self.pos = [playerPos[0] - 14, playerPos[1] - 14]  # add an offset to makesure that the bullets line up with the player
 
@@ -164,19 +166,28 @@ while running:
             # shooting
 
             if event.key == pygame.K_UP:
-                proj = Projectile("up", playerPosition)
-                projectiles.append(proj)
-                print(len(projectiles))
+                if playerAmmo > 0:
+                    playerAmmo -= 1
+                    proj = Projectile("up", playerPosition)
+                    projectiles.append(proj)
+
             elif event.key == pygame.K_DOWN:
-                proj = Projectile("down", playerPosition)
-                projectiles.append(proj)
+                if playerAmmo > 0:
+                    playerAmmo -= 1
+                    proj = Projectile("down", playerPosition)
+                    projectiles.append(proj)
 
             if event.key == pygame.K_LEFT:
-                proj = Projectile("left", playerPosition)
-                projectiles.append(proj)
+                if playerAmmo > 0:
+                    playerAmmo -= 1
+                    proj = Projectile("left", playerPosition)
+                    projectiles.append(proj)
+
             elif event.key == pygame.K_RIGHT:
-                proj = Projectile("right", playerPosition)
-                projectiles.append(proj)
+                if playerAmmo > 0:
+                    playerAmmo -= 1
+                    proj = Projectile("right", playerPosition)
+                    projectiles.append(proj)
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
@@ -225,14 +236,13 @@ while running:
     shot = check_projectile_collision()
     if shot:
         playerScore += 1
+        playerAmmo += 2
 
     playerStatus = check_player_collision()
 
     if playerStatus:
         dead = True
         loadScores = True
-
-    scoreText = defaultFont.render(str(playerScore), 1, (255, 0, 0))
 
     window.fill(colors["yellow"])
 
@@ -241,10 +251,14 @@ while running:
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ drawing code under here
 
     if not dead:
+        scoreText = defaultFont.render(str(playerScore), 1, colors["red"])
+        ammoText  = defaultFont.render("Ammo: " + str(playerAmmo), 1, colors["red"])
+
         draw_projectiles()
         draw_enemies()
         window.blit(playerImage, (playerPosition[0] - 14, playerPosition[1] - 14))
         window.blit(scoreText, (380, 20))
+        window.blit(ammoText, (600, 20))
         clean_memory()
     else:
         if showText:
