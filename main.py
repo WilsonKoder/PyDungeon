@@ -2,9 +2,13 @@ __author__ = 'WilsonKoder'
 
 # Dungeon Game by Wilson
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ imports
+
 import pygame  # used for graphics
 import random  # used for enemy spawning
 import sys  # used to close the application
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 pygame.init()
 
@@ -56,7 +60,8 @@ showText = False
 # Projectile Class
 
 projectiles = []
-projectileImage = pygame.image.load("res/img/projectile.png")
+PROJECTILE_IMG_PATH = "res/img/projectile.png"
+projectileImage = pygame.image.load(PROJECTILE_IMG_PATH)
 
 class Projectile:
 
