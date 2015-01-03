@@ -64,6 +64,7 @@ projectiles = []
 PROJECTILE_IMG_PATH = "res/img/projectile.png"
 projectileImage = pygame.image.load(PROJECTILE_IMG_PATH)
 
+
 class Projectile:
 
     direction = ""
@@ -93,17 +94,17 @@ enemySpeed = 3
 
 
 class Enemy:
+
     pos = [1, 1]
 
     def __init__(self):
         self.pos = [random.randint(0, 799), random.randint(0, 599)]
 
-        while self.pos[0] < playerPosition[0] + 100 and self.pos[0] > playerPosition[0] - 100:
+        while self.pos[0] < playerPosition[0] + 50 and self.pos[0] > playerPosition[0] - 50:
             self.pos[0] = random.randint(0, 799)
 
-        while self.pos[1] < playerPosition[1] + 100 and self.pos[1] > playerPosition[1] - 100:
+        while self.pos[1] < playerPosition[1] + 50 and self.pos[1] > playerPosition[1] - 50:
             self.pos[1] = random.randint(0, 599)
-
 
     def match_position(self, player_pos):
         if self.pos[0] < player_pos[0]:
@@ -142,12 +143,11 @@ def check_projectile_collision():
     for enemy in enemies:
         for proj in projectiles:
             if enemy.pos[0] < proj.pos[0] + 28 and enemy.pos[0] + 28 > proj.pos[0] and enemy.pos[1] < proj.pos[1] + 14 and enemy.pos[1] + 14 > proj.pos[1]:
-                print("shot")
                 try:
                     enemies.remove(enemy)
                     projectiles.remove(proj)
                 except ValueError:
-                    print("oops!")
+                    print("Oops! Something odd happened there!")
                 return True
 
 
